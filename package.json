@@ -1,0 +1,29 @@
+{
+  "name": "potlock",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^1.0.3",
+    "bcryptjs": "*",
+    "body-parser": "*",
+    "connect-flash": "*",
+    "cookie-parser": "^1.4.1",
+    "express": "*",
+    "express-handlebars": "*",
+    "express-messages": "*",
+    "express-session": "*",
+    "express-validator": "*",
+    "mysql2": "^1.5.1",
+    "node-mailer": "^0.1.1",
+    "passport": "^0.4.0",
+    "passport-http": "*",
+    "passport-local": "*",
+    "sequelize": "^4.3.1"
+  }
+}
