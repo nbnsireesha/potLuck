@@ -47,7 +47,9 @@ var userName;
 var userEmail;
 
 //addes email's of guests to potluck table
-router.post('potluck/update', function(req, res){
+router.post('/potLuck/update', function(req, res){
+
+	const Op = Sequelize.Op;
 
 	var guestEmails = res.body.guestEmails;
 	req.checkBody('emails', 'emails are required').notEmpty();
@@ -70,7 +72,12 @@ router.post('potluck/update', function(req, res){
 		};
 		db.PotLuck.update(potluckadd, 
 			{
-				where:{UserId: req.user.dataValues.id}
+				where:{	UserId: req.user.dataValues.id,
+						createdAt: {
+							[Op.eq]: new Date()
+						}
+					}
+
 			}, 
 			function(err, potLuck){
 					if(err) throw err;
