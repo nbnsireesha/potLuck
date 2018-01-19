@@ -49,24 +49,27 @@ var userEmail;
 
 //addes email's of guests to potluck table
 router.post('/potLuck/update', function(req, res){
-	console.log("inside potluck update");
 
 	const Op = Sequelize.Op;
+	console.log("inside potluck update");
+
 
 	var guestEmails = req.body.guestEmails;
-	req.checkBody('emails', 'emails are required').notEmpty();
+	// req.checkBody('emails', 'emails are required').notEmpty();
+	// console.log("guest emails are:" +guestEmails);
 
-	var errors = req.validationErrors();
+	// var errors = req.validationErrors();
 
 	UserId = req.user.dataValues.id;
 	userName = req.user.dataValues.username;
 	userEmail = req.user.dataValues.email;
 
-	if(errors){
-		res.render('dashbord',{
-			errors:errors
-		});
-	} else{
+	// if(errors){
+	// 	res.render('dashbord',{
+	// 		errors:errors
+	// 	});
+	// 	console.log(errors);
+	// } else{
 
 		var potluckadd ={
 			guestEmails: guestEmails
@@ -90,7 +93,7 @@ router.post('/potLuck/update', function(req, res){
 		req.flash('success_msg', 'Invited Guests');
 
 		res.redirect('/dashbord/dashbord');
-	}
+	// }
 
 })
 //function that sends email requests
@@ -152,7 +155,7 @@ function getPotLuckDetails(){
 		}
 	}).then(function(potLuckInfo){
 
-		return res.json(potLuckInfo);
+		return potluckInfo;
 	})
 
 }
