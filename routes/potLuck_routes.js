@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 const nodemailer = require('nodemailer');
+var Sequelize = require('sequelize');
 
 
 var db = require('../models');
@@ -48,10 +49,11 @@ var userEmail;
 
 //addes email's of guests to potluck table
 router.post('/potLuck/update', function(req, res){
+	console.log("inside potluck update");
 
 	const Op = Sequelize.Op;
 
-	var guestEmails = res.body.guestEmails;
+	var guestEmails = req.body.guestEmails;
 	req.checkBody('emails', 'emails are required').notEmpty();
 
 	var errors = req.validationErrors();
@@ -154,6 +156,16 @@ function getPotLuckDetails(){
 	})
 
 }
+//get all potluck info of the user that they host
+router.get("/user/potLuck",function(req,res){
+	db.PotLuck.findAll({
+		where:{
+			UserId: req.user.dataValues.id
+		}
+	}).then(function(potLuckData){
+		res.json(potLuckData)
+	})
+})
 
 module.exports = router;
 
