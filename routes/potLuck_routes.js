@@ -3,7 +3,7 @@ var router = express.Router();
 var passport = require('passport');
 const nodemailer = require('nodemailer');
 var Sequelize = require('sequelize');
-
+var dateFormat = require('dateformat');
 
 var db = require('../models');
 
@@ -77,10 +77,10 @@ router.post('/potLuck/update', function(req, res){
 		};
 		db.PotLuck.update(potluckadd, 
 			{
-				where:{	UserId: req.user.dataValues.id,
-						createdAt: {
-							[Op.eq]: new Date()
-						}
+				where:{	UserId: req.user.dataValues.id
+						// createdAt: {
+						// 	[Op.eq]: new Date()
+						// }
 					}
 
 			}, 
@@ -88,26 +88,46 @@ router.post('/potLuck/update', function(req, res){
 					if(err) throw err;
 					console.log(potLuck);
 			});
-		//function call which sends req mails to the guests
-		sendemailRequest(guestEmails);
-		req.flash('success_msg', 'Invited Guests');
+		db.PotLuck.findOne({
+			where: {
+				UserId: UserId
+				// createdAt: {
+				// 	[Op.eq]: new Date()
+				// }
+			}
+		}).then(function(potLuckInfo){
+			potLuckDate = JSON.stringify(potLuckInfo.date);
+		 	potLuckId = JSON.stringify(potLuckInfo.id);
 
-		res.redirect('/dashbord/dashbord');
-	// }
+		 	//function call which sends req mails to the guest
+		 	sendemailRequest(guestEmails, potLuckDate, potLuckId);
+			req.flash('success_msg', 'Invited Guests');
+
+			res.redirect('/dashbord/dashbord');
+		})
 
 })
 //function that sends email requests
-function sendemailRequest(emails){
-	var potluckInfo = getPotLuckDetails();
-	var potLuckDate = potluckInfo.date;
-	var potLuckId = potluckInfo.id;
+function sendemailRequest(guestEmails, potLuckDate, potLuckId){
 
-	var outputData = {
-		potLuckDate: potluckInfo.date,
-		potLuckId: potluckInfo.id,
-		userEmail: userEmail,
-		userName: userName
-	}
+	// var outputData = {
+	// 	potLuckDate: potLuckDate,
+	// 	potLuckId: potLuckId,
+	// 	userEmail: userEmail,
+	// 	userName: userName
+	// }
+
+	var outputData = `
+		p>You have a new POTLUCK request</p>
+    	<h3>Contact Details</h3>
+    	<ul>  
+	      <li>Name: ${userName}</li>
+	      <li>Email: ${userEmail}</li>
+	      <li>Date of PotLuck: ${potLuckDate}</li>
+	      <li>Id of PotLuck: ${potLuckId}</li>
+	    </ul>
+	`;
+	// console.log(outputData);
 	// create reusable transporter object using the default SMTP transport
 	var transporter = nodemailer.createTransport({
 	    // service:'gmail',
@@ -122,43 +142,45 @@ function sendemailRequest(emails){
 	      rejectUnauthorized:false
 	    }
 	});
+	console.log("created trasporter");
 
 	  // setup email data with unicode symbols
 	var mailOptions = {
 	    from: userName +'&lt;' +userEmail +'&gt;', // sender address
-	    to: emails, // list of receivers
+	    to: guestEmails, // list of receivers
 	    subject: 'POTLUCK Request', // Subject line
 	    text: 'Hello world?', // plain text body
 	    html: outputData // html body
 	};
+	console.log("-----mailOptions----" +JSON.stringify(mailOptions));
 
 	  // send mail with defined transport object
 	transporter.sendMail(mailOptions, (error, info) => {
 	    if (error) {
-	        return console.log(error);
+	        return console.log('error and trasporter', error);
 	    }
 	    req.flash('success_msg', 'emailed the request');
 	    // res.render('dashbord');
 	});
 }
 
-function getPotLuckDetails(){
+// function getPotLuckDetails(){
 
-	const Op = Sequelize.Op;
+// 	const Op = Sequelize.Op;
 
-	db.PotLuck.findOne({
-		where: {
-			UserId: UserId,
-			createdAt: {
-				[Op.eq]: new Date()
-			}
-		}
-	}).then(function(potLuckInfo){
+// 	db.PotLuck.findOne({
+// 		where: {
+// 			UserId: UserId,
+// 			createdAt: {
+// 				[Op.eq]: new Date()
+// 			}
+// 		}
+// 	}).then(function(potLuckInfo){
 
-		return potluckInfo;
-	})
+// 		return potluckInfo;
+// 	})
 
-}
+// }
 //get all potluck info of the user that they host
 router.get("/user/potLuck",function(req,res){
 	db.PotLuck.findAll({

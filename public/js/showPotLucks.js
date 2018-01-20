@@ -37,7 +37,7 @@ $(document).ready(function() {
 
 		var alertDiv = $("<div>");
 	    alertDiv.addClass("alert alert-danger");
-	    alertDiv.text("You must create an Author before you can create a Post.");
+	    alertDiv.text("You must create an Potluck");
 	    potLuckContainer.append(alertDiv);
 
 	}
