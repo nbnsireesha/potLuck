@@ -183,14 +183,18 @@ function sendemailRequest(guestEmails, potLuckDate, potLuckId){
 // }
 //get all potluck info of the user that they host
 router.get("/user/potLuck",function(req,res){
+	console.log("ENTERREEDFJEFOINAOSDPGN");
 	db.PotLuck.findAll({
 		where:{
-			UserId: req.user.dataValues.id
+			UserId: 1 //req.user.dataValues.id
 		}
 	}).then(function(potLuckData){
-		res.json(potLuckData)
+		console.log("-----data-----------"+ JSON.stringify(potLuckData))
+		res.json(potLuckData);
+		//res.redirect('/user/potLuck');
 	})
-})
+});
+
 
 module.exports = router;
 
