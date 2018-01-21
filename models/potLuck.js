@@ -10,9 +10,11 @@ module.exports = function(sequelize, DataTypes) {
     // Associating Author with Posts
     // When an Author is deleted, also delete any associated Posts
     PotLuck.belongsTo(models.User, {
-        // foreignKey: {
-        //   allowNull: false
-        // }
+ // PotLuck.associate = function(models) {
+ //  console.log(models);
+ //   models.Potluck.belongsToMany(models.User, { through: models.UserPotluck, foriegnKey: "user_id" })
+    
+ //  };
     });
   };
   return PotLuck;

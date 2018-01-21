@@ -186,15 +186,32 @@ router.get("/user/potLuck",function(req,res){
 	console.log("ENTERREEDFJEFOINAOSDPGN");
 	db.PotLuck.findAll({
 		where:{
-			UserId: 1 //req.user.dataValues.id
+			UserId: 1 //requser.dataValues.id.
 		}
 	}).then(function(potLuckData){
 		console.log("-----data-----------"+ JSON.stringify(potLuckData))
-		res.json(potLuckData);
+		//console.log(potLuckData);
+	//res.render(`/dashbord/dashbord?${res.json(potLuckData)}`);
+	//res.render(`/dashbord/dashbord?${res.json(potLuckData)}`);
+	res.render('dashbord/dashbord', {potLuckData: potLuckData});
+		//res.json(potLuckData);
 		//res.redirect('/user/potLuck');
-	})
+	// }).then(function(potLuckData){
+	// 	res.redirect('/user/potLuck');
+	// });
+});
+// router.get("/user/potLuck",function(req,res){
+
+// 	res.redirect('/user/potLuck');
 });
 
+// router.get("user/allPotlucks", function(req, res) {
+// 	db.PotLuck.findAll({
+
+// 	}).then(function(potLuckData){
+// 		res.render()
+// 	})
+// })
 
 module.exports = router;
 
