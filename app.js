@@ -13,6 +13,7 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var dashbord = require('./routes/dashbord_routes');
 var potLuck = require('./routes/potLuck_routes');
+var potLuckFood = require('./routes/potLuckFood_routes');
 // var register = require()
 
 
@@ -87,6 +88,7 @@ app.use('/', routes);
 app.use('/users', users);
 app.use('/dashbord', dashbord);
 app.use('/potLuck', potLuck);
+app.use('/potLuckFood', potLuckFood);
 // require("./routes/dashbord_routes.js")(app);
 
 // Set Port
