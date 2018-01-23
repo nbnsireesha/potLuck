@@ -5,6 +5,7 @@ $(document).ready(function() {
 
 	var potLuckFood = $("#food");
 	var potLuckId= $("#potLuckId");
+	var flag = 0;
 
 	function joinPotLuck(){
 		$(".potLuck-container").hide();
@@ -12,6 +13,7 @@ $(document).ready(function() {
 		$(".fooInfo").hide();
 		$(".hostPotForm").hide();
 		$(".inviteForm").hide();
+		//$(".alert-success").hide();
 
 
 		console.log("inside joinPotLuck");
@@ -37,7 +39,11 @@ $(document).ready(function() {
 
 	}
 
+	var bodyContainer = $(".body-container");
+	
+
 	function upsertPotLuckFood(foodData){
+		
 		console.log(" inside upsertPotLuckFood");
 		$.post("/potLuckFood/potLuck/food", foodData)
 		.done(function(results) {
@@ -47,10 +53,26 @@ $(document).ready(function() {
 			potLuckId.val("");
 
 		}).fail(function(err){
+			// var flag = 0;
 			console.log("fail");
 			console.log(err);
 			$(".joinForm").hide();
-			alert("you have already entered the food for this potluck");
+			//$(".alert-success").show();
+			//alert("you have already entered the food for this potluck");
+
+
+			var alertDiv = $("<div>");
+			alertDiv.addClass("alert alert-danger");
+			if(flag == 0){
+			    	alertDiv.text("You have already entered the food for this PotLuck");
+				    flag = 1;
+				    bodyContainer.append(alertDiv);
+			}
+			potLuckFood.val("");
+			potLuckId.val("");
+
+
+			$(".alert-danger").show().delay(3000).fadeOut();
 
 		});
 	}

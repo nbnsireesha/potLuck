@@ -90,7 +90,7 @@ passport.use(new LocalStrategy(
 	    	if(res){
 	    		return done(null, user, {message: 'you logged in'});
 	    	}else{
-	    		return done(null, false, { message: 'Incorrect password.' });
+	    		return done(null, false, {message: 'Incorrect password.' });
 	    	}
 		});
     })
@@ -110,7 +110,7 @@ passport.deserializeUser(function(id, done) {
 });
 
 router.post('/login',
-  passport.authenticate('local'), //{successRedirect:'/dashbord/dashbord', failureRedirect:'/users/login',failureFlash: true}),
+  passport.authenticate('local', {successRedirect:'/dashbord/dashbord', failureRedirect:'/users/login',failureFlash: true}),
   function(req, res) {
   	userID = req.user.id;
   	console.log("user id of the user" + userID);

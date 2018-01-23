@@ -90,12 +90,12 @@ router.post('/potLuck/update', function(req, res){
 		console.log("guestEmails:" +guestEmails);
 		db.PotLuck.findOne({
 			where:{
-					UserId: UserId
-					// createdAtDateOnly: {
+					UserId: UserId,
+					createdAtDateOnly: {
 
-					// 	[Op.eq]: compareDate
+						[Op.eq]: compareDate
 
-					// }
+					}
 			}
 		}).then(function(data){
 
@@ -104,12 +104,12 @@ router.post('/potLuck/update', function(req, res){
 				console.log("no data is selected");
 				return;
 			}
-			console.log(data);
+			console.log("---email data----"+data);
 			console.log("emails data"+JSON.stringify(data));
 			emails = JSON.stringify(data.guestEmails);
 			//addData(guestEmails);
 			console.log("---------" +emails);
-			if(data.emails == null){
+			if(emails === null){
 				var allEmails = guestEmails;
 			}
 			else{

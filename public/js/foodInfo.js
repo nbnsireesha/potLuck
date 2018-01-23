@@ -9,6 +9,7 @@ $(document).ready(function() {
 
 	function show(event){
 
+		//$(".alert-success").hide();
 		$(".fooInfo").show();
 		event.preventDefault();
 		$(".inviteForm").hide();
