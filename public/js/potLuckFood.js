@@ -7,10 +7,17 @@ $(document).ready(function() {
 	var potLuckId= $("#potLuckId");
 
 	function joinPotLuck(){
+		$(".potLuck-container").hide();
+		$(".potLuck-FoodContainer").hide();
+		$(".fooInfo").hide();
+		$(".hostPotForm").hide();
+		$(".inviteForm").hide();
+
+
 		console.log("inside joinPotLuck");
 		$(".joinForm").show();
 		event.preventDefault();
-		
+
 	}
 
 	function addInfo(){
@@ -36,6 +43,9 @@ $(document).ready(function() {
 		.done(function(results) {
 			console.log("done");
 			$(".joinForm").hide();
+			potLuckFood.val("");
+			potLuckId.val("");
+
 		}).fail(function(err){
 			console.log("fail");
 			console.log(err);

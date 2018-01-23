@@ -9,11 +9,21 @@ $(document).ready(function() {
 	function getPotLuckInfo(event){
 		event.preventDefault();
 		console.log("get potluck info");
+
+		$(".potLuck-FoodContainer").hide();
+		$(".hostPotForm").hide();
+		$(".fooInfo").hide();
+		$(".joinForm").hide();
+		$(".inviteForm").hide();
+		$("#tbodyInfo").empty();
+
+		$("#theadInfo").show();
 		$(".potLuck-container").show();
 		$.get("/potLuck/user/potLuck", function(data){
 				console.log("inside ajax" +JSON.stringify(data));
 				//console.log("data[1]" +JSON.stringify(data[1].id));
 				if (data.potLuckData.length !== 0) {
+					$(".alert-danger").hide();
 	    			for (var i = 0; i < data.potLuckData.length; i++) {
 	     				 var row = $("#potlucktable > tbody");
 	     				 row.addClass("eventsInTable");
@@ -36,7 +46,8 @@ $(document).ready(function() {
 
 	// Function for handling what to render when there are no potLucks
 	function renderEmpty(){
-
+		$("#potLuckInfoH1").hide();
+		$("#theadInfo").hide();
 		var alertDiv = $("<div>");
 	    alertDiv.addClass("alert alert-danger");
 	    alertDiv.text("You must create an Potluck");

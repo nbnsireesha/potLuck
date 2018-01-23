@@ -108,11 +108,12 @@ router.post('/potLuck/update', function(req, res){
 			console.log("emails data"+JSON.stringify(data));
 			emails = JSON.stringify(data.guestEmails);
 			//addData(guestEmails);
-			if(emails != null){
-				var allEmails = emails +"," +guestEmails;
+			console.log("---------" +emails);
+			if(data.emails == null){
+				var allEmails = guestEmails;
 			}
 			else{
-				allEmails = guestEmails;
+				 allEmails = emails +"," +guestEmails;
 			}
 			
 			console.log("--all emails--"+allEmails);
