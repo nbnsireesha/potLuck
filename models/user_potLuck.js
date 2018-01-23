@@ -1,7 +1,7 @@
 module.exports = function(sequelize, DataTypes) {
   var UserPotluck = sequelize.define("UserPotluck", {
     food: DataTypes.STRING,
-    coming: DataTypes.BOOLEAN,
+    coming: DataTypes.STRING,
     usename: DataTypes.STRING,
     idOfPotLuck: DataTypes.STRING
  });

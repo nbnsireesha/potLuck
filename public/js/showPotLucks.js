@@ -13,16 +13,17 @@ $(document).ready(function() {
 		$.get("/potLuck/user/potLuck", function(data){
 				console.log("inside ajax" +JSON.stringify(data));
 				//console.log("data[1]" +JSON.stringify(data[1].id));
-				if (data.length !== 0) {
-	    			for (var i = 0; i < data.length; i++) {
-	     				 var row = $(".potLuck-container > tbody");
+				if (data.potLuckData.length !== 0) {
+	    			for (var i = 0; i < data.potLuckData.length; i++) {
+	     				 var row = $("#potlucktable > tbody");
 	     				 row.addClass("eventsInTable");
-						 row.append("<tr><td>" + JSON.stringify(data[i].id) + "</td><td>" + JSON.stringify(data[i].date) + "</td><td>"
-	      				+ JSON.stringify(data[i].guestEmails) + "</td>");
+	     				 console.log(data.potLuckData[i].guestEmails);
+						 row.append("<tr><td>" + data.potLuckData[i].id + "</td><td>" + data.potLuckData[i].date + "</td><td>"
+	      				+ data.potLuckData[i].guestEmails + "</td></tr>");
 	      // row.append("<p>" + data[i].date + "</p>");
 	      // row.append("<p>" + data[i].guestnames + "</p>");
 
-	     				 $(".potLuck-container").append(row);
+	     				 $("#potlucktable").append(row);
 
 	   					 }
 

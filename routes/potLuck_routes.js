@@ -90,28 +90,34 @@ router.post('/potLuck/update', function(req, res){
 		console.log("guestEmails:" +guestEmails);
 		db.PotLuck.findOne({
 			where:{
-					UserId: UserId,
-					createdAtDateOnly: {
+					UserId: UserId
+					// createdAtDateOnly: {
 
-						[Op.eq]: compareDate
+					// 	[Op.eq]: compareDate
 
-					}
+					// }
 			}
-		}).then(function(err,data){
-			console.log("inside findone");
-			if(err) console.log("errors are :"+err);
+		}).then(function(data){
+
+			console.log(arguments);
 			if(!data){
 				console.log("no data is selected");
 				return;
 			}
 			console.log(data);
 			console.log("emails data"+JSON.stringify(data));
-			emails = json.stringify(data.guestEmails);
+			emails = JSON.stringify(data.guestEmails);
 			//addData(guestEmails);
-			var allEmails = emails +"," +guestEmails;
+			if(emails != null){
+				var allEmails = emails +"," +guestEmails;
+			}
+			else{
+				allEmails = guestEmails;
+			}
+			
 			console.log("--all emails--"+allEmails);
 			var potluckadd = {
-				guestEmails: emails + "," +guestEmails
+				guestEmails: allEmails
 				// UserId: req.user.dataValues.id
 			};
 			db.PotLuck.update(potluckadd, 
@@ -131,7 +137,9 @@ router.post('/potLuck/update', function(req, res){
 					console.log(potLuck);
 			});
 
-		})
+		}).catch(function(err){
+			console.log(err);
+		});
 		db.PotLuck.findOne({
 			where: {
 				UserId: UserId
@@ -241,8 +249,9 @@ router.get("/user/potLuck",function(req,res){
 		console.log("------data---"+JSON.stringify(potLuckData))
 		var data = JSON.stringify(potLuckData);
 		//res.redirect('/dashbord/dashbord',{data:data});
-		res.render(`/dashbord/dashbord?${res.json(potLuckData)}`);
+		//res.render(`/dashbord/dashbord?${JSON.stringify(res.json(potLuckData))}`);
 		//res.render('dashbord',{potLuckData: potLuckData});
+		res.json({potLuckData: potLuckData});
 	})
 })
 

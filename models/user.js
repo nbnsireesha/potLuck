@@ -9,8 +9,8 @@ module.exports = function(sequelize, DataTypes) {
   });
 
   User.associate = function(models) {
-   // models.User.belongsToMany(models.PotLuck, { through: models.UserPotluck, foriegnKey: "potluck_id" })
-      models.User.belongsToMany(models.PotLuck, { through: models.UserPotluck})
+   //models.User.belongsToMany(models.PotLuck, { through: models.UserPotluck, foriegnKey: "potluck_id" })
+      //models.User.belongsToMany(models.PotLuck, { through: models.UserPotluck})
   };
   return User;
 };

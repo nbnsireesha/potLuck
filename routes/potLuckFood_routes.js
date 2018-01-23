@@ -7,11 +7,13 @@ var db = require('../models');
 router.post('/potLuck/food', function(req, res){
 	console.log("post food");
 	var userId = req.user.dataValues.id;
-	var name = req.user.dataValues.name;
+	var name = req.user.dataValues.username;
 	var attending = req.body.attending;
 	var food = req.body.food;
 	var potLuckId =req.body.PotLuckId;
 	req.checkBody('food', 'food is required').notEmpty();
+
+	console.log("user name in food" +name);
 
 	var errors = req.validationErrors();
 
@@ -21,7 +23,7 @@ router.post('/potLuck/food', function(req, res){
 		});
 	}else{
 		var foodInfo = {
-			name: name,
+			usename: name,
 			coming: attending,
 			food: food,
 			idOfPotLuck: potLuckId,

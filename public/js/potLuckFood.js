@@ -15,10 +15,11 @@ $(document).ready(function() {
 	function addInfo(){
 		var radioValue;
 		event.preventDefault();
-	    $("input[type='button']").click(function(){
+	    // $("input[type='button']").click(function(){
             radioValue = $("input[name='attending']:checked").val();
-        });
-
+            console.log(radioValue);
+        // });
+	    console.log("---radio value---"+radioValue);
 	    console.log("inside create potluck(2)");
 	    upsertPotLuckFood({
 	      attending: radioValue,
