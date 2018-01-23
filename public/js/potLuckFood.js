@@ -10,6 +10,7 @@ $(document).ready(function() {
 		console.log("inside joinPotLuck");
 		$(".joinForm").show();
 		event.preventDefault();
+		
 	}
 
 	function addInfo(){
@@ -32,12 +33,16 @@ $(document).ready(function() {
 	function upsertPotLuckFood(foodData){
 		console.log(" inside upsertPotLuckFood");
 		$.post("/potLuckFood/potLuck/food", foodData)
-			.done(function(data){
-				$(".joinForm").hide();
-			})
-			.fail(function(err){
-				console.log(err);
-			});
+		.done(function(results) {
+			console.log("done");
+			$(".joinForm").hide();
+		}).fail(function(err){
+			console.log("fail");
+			console.log(err);
+			$(".joinForm").hide();
+			alert("you have already entered the food for this potluck");
+
+		});
 	}
 
 	

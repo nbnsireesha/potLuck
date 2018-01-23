@@ -216,7 +216,9 @@ function sendemailRequest(guestEmails, potLuckDate, potLuckId, theme, destinatio
 	    if (error) {
 	        return console.log('error and trasporter', error);
 	    }
-	    req.flash('success_msg', 'emailed the request');
+	    msg = "emailed the request";
+	    //res.render('dashbord', {success_msg: msg});
+	    res.flash('success_msg', 'emailed the request');
 	    // res.render('dashbord');
 	});
 }

@@ -29,12 +29,31 @@ router.post('/potLuck/food', function(req, res){
 			idOfPotLuck: potLuckId,
 			UserId: userId
 		}
-		db.UserPotluck.create(foodInfo, function(err, data){
-			if(err) throw err;
+		db.UserPotluck.create(foodInfo, function(data){
+			console.log("success");
+			res.redirect('/dashbord/dashbord');
+		})
+		.catch(function(err) {
+			console.log("error in food " + err);
+			res.status(500).send(err);
 		});
-		res.redirect('/dashbord/dashbord');
+		
 	}
 	
+
+})
+
+router.get("/potLuck/food", function(req, res){
+	 var query = {};
+	console.log("req query "+JSON.stringify(req.query));
+	 query.idOfPotLuck = req.query.idOfPotLuck;
+	console.log("--query--"+JSON.stringify(query));
+	db.UserPotluck.findAll({
+		where: query
+	}).then(function(data){
+		console.log("data***" +JSON.stringify(data));
+		res.json({data:data});
+	})
 
 })
 
