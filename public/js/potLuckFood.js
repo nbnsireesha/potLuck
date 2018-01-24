@@ -1,7 +1,7 @@
 $(document).ready(function() {
 	$(".joinForm").hide();
 	$(document).on("click", ".join", joinPotLuck);
-	$(document).on("click", ".addInfo", addInfo);
+	$(document).one("click", ".addInfo", addInfo);
 
 	var potLuckFood = $("#food");
 	var potLuckId= $("#potLuckId");
@@ -75,6 +75,44 @@ $(document).ready(function() {
 			$(".alert-danger").show().delay(3000).fadeOut();
 
 		});
+
+		// $.ajax({
+		// 	method: "POST",
+		// 	url: "/potLuckFood/potLuck/food",
+		// 	async: false
+
+		// })
+		// .done(function(results){
+		// 	console.log("done");
+		// 	$(".joinForm").hide();
+		// 	potLuckFood.val("");
+		// 	potLuckId.val("");
+
+		// })
+		// .fail(function(err){
+
+		// 	//var flag = 0;
+		// 	// console.log("fail");
+		// 	console.log(err);
+		// 	$(".joinForm").hide();
+		// 	//$(".alert-success").show();
+		// 	//alert("you have already entered the food for this potluck");
+
+
+		// 	var alertDiv = $("<div>");
+		// 	alertDiv.addClass("alert alert-danger");
+		// 	if(flag == 0){
+		// 	    	alertDiv.text("You have already entered the food for this PotLuck");
+		// 		    flag = 1;
+		// 		    bodyContainer.append(alertDiv);
+		// 	}
+		// 	potLuckFood.val("");
+		// 	potLuckId.val("");
+
+
+		// 	$(".alert-danger").show().delay(3000).fadeOut();
+
+		// })
 	}
 
 	

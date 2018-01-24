@@ -77,7 +77,7 @@ $(document).ready(function() {
 		alertSuccesDiv.text("You can now invite to your PotLuck");
 		bodyContainer.append(alertSuccesDiv);
 
-		$(".alert-danger").show().delay(3000).fadeOut();
+		$(".alert-success").show().delay(3000).fadeOut();
 
 
 	}
