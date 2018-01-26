@@ -19,9 +19,31 @@ router.post('/potLuck/food', function(req, res){
 
 	if(errors){
 		res.render('dashbord',{
-			errors:errors
+			error:errors
 		});
 	}else{
+		db.PotLuck.findOne({
+			where: {
+				id: potLuckId
+			}
+
+		}).then(function(data){
+			console.log("------data-----", data == null);
+			if(data == null){
+				console.log("your potluckId is invalid");
+				//res.render('dashbord', {error: "your potluckId is invalid"});
+				var error = "your potluckId is invalid";
+				res.json({data:error});
+			}
+			else{
+				addInfo();
+			}
+
+		})
+
+	}
+
+	function addInfo(){
 		var foodInfo = {
 			usename: name,
 			coming: attending,
@@ -29,9 +51,10 @@ router.post('/potLuck/food', function(req, res){
 			idOfPotLuck: potLuckId,
 			UserId: userId
 		}
-		db.UserPotluck.create(foodInfo, function(data){
+		db.UserPotluck.create(foodInfo)
+		.then(function(data){
 			console.log("success");
-			res.redirect('/dashbord/dashbord');
+			res.send(data);
 		})
 		.catch(function(err) {
 			console.log("error in food " + err);

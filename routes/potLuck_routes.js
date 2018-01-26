@@ -26,7 +26,6 @@ router.post('/potLuck', function(req, res){
 	console.log("-------theme------"+theme);
 	req.checkBody('date', 'date is required').notEmpty();
 	req.checkBody('date', 'enter correct formated date').isISO8601();
-	//console.log(req.checkBody('date', 'enter correct formated date'));
 
 	var errors = req.validationErrors();
 
@@ -43,13 +42,14 @@ router.post('/potLuck', function(req, res){
 			createdAtDateOnly: createdAtDateOnly,
 			UserId: req.user.dataValues.id
 		};
-		db.PotLuck.create(newPotluck, function(err, potLuck){
-			if(err) throw err;
-			console.log(potLuck);
-		});
-		req.flash('success_msg', 'Created a potLuck, you can now invite guests');
+		db.PotLuck.create(newPotluck).then(function(potLuck){
+			console.log("potluck info"+potLuck);
+			res.json({data:potLuck});
 
-		res.redirect('/dashbord/dashbord');
+		}).catch(function(err){
+			console.log(err);
+		})
+		
 	}
 });
 
@@ -64,11 +64,8 @@ router.post('/potLuck/update', function(req, res){
 	const Op = Sequelize.Op;
 	console.log("inside potluck update");
 
-	var compareDate = dateFormat(now, "d mmmm yyyy");
-	console.log("compareDate :" +compareDate);
-	//console.log("----req----"+req.body);
-
 	var guestEmails = req.body.guestEmails;
+	var idInvite = req.body.idInvite;
 	// req.checkBody('emails', 'emails are required').notEmpty();
 	// console.log("guest emails are:" +guestEmails);
 
@@ -81,96 +78,77 @@ router.post('/potLuck/update', function(req, res){
 
 	console.log("findone userId****"+UserId);
 
-	// if(errors){
-	// 	res.render('dashbord',{
-	// 		errors:errors
-	// 	});
-	// 	console.log(errors);
-	// } else{
 		console.log("guestEmails:" +guestEmails);
 		db.PotLuck.findOne({
 			where:{
 					UserId: UserId,
-					createdAtDateOnly: {
-
-						[Op.eq]: compareDate
-
-					}
+					id: idInvite
 			}
 		}).then(function(data){
 
 			console.log(arguments);
-			if(!data){
-				console.log("no data is selected");
+			if(data == null){
+				console.log("invalid potluck for the user");
+				error = "invalid potluck for the user";
+				res.json({data:error});
 				return;
 			}
-			console.log("---email data----"+data);
-			console.log("emails data"+JSON.stringify(data));
 			emails = JSON.stringify(data.guestEmails);
-			//addData(guestEmails);
-			console.log("---------" +emails);
-			if(emails === null){
+			if(emails == "null"){
 				var allEmails = guestEmails;
 			}
 			else{
 				 allEmails = emails +"," +guestEmails;
 			}
 			
-			console.log("--all emails--"+allEmails);
 			var potluckadd = {
 				guestEmails: allEmails
-				// UserId: req.user.dataValues.id
 			};
 			db.PotLuck.update(potluckadd, 
 			{
 				where:{	
 					UserId: req.user.dataValues.id,
-					createdAtDateOnly: {
-
-						[Op.eq]: compareDate
-
-					}
+					id: idInvite
 				}
 
 			}, 
 			function(err, potLuck){
 					if(err) throw err;
-					console.log(potLuck);
+					emailCode();
+					
 			});
 
 		}).catch(function(err){
 			console.log(err);
 		});
-		db.PotLuck.findOne({
-			where: {
-				UserId: UserId
-				// createdAt: {
-				// 	[Op.eq]: new Date()
-				// }
-			}
-		}).then(function(potLuckInfo){
-			potLuckDate = JSON.stringify(potLuckInfo.date);
-		 	potLuckId = JSON.stringify(potLuckInfo.id);
-		 	theme = JSON.stringify(potLuckInfo.theme);
-		 	destination = JSON.stringify(potLuckInfo.hostedAt);
 
-		 	//function call which sends req mails to the guest
-		 	sendemailRequest(guestEmails, potLuckDate, potLuckId, theme, destination);
-			req.flash('success_msg', 'Invited Guests');
 
-			res.redirect('/dashbord/dashbord');
-		})
+		function emailCode(){
+
+			//getting user details so that we can send host info to the guest
+			db.PotLuck.findOne({
+				where: {
+					UserId: UserId
+				}
+			}).then(function(potLuckInfo){
+				potLuckDate = JSON.stringify(potLuckInfo.date);
+			 	potLuckId = JSON.stringify(potLuckInfo.id);
+			 	theme = JSON.stringify(potLuckInfo.theme);
+			 	destination = JSON.stringify(potLuckInfo.hostedAt);
+
+			 	//function call which sends req mails to the guest
+			 	sendemailRequest(guestEmails, potLuckDate, potLuckId, theme, destination);
+				//req.flash('success_msg', 'Invited Guests');
+
+				//res.redirect('/dashbord/dashbord');
+			})
+
+		}
 
 })
 //function that sends email requests
 function sendemailRequest(guestEmails, potLuckDate, potLuckId, theme, destination){
 
-	// var outputData = {
-	// 	potLuckDate: potLuckDate,
-	// 	potLuckId: potLuckId,
-	// 	userEmail: userEmail,
-	// 	userName: userName
-	// }
 
 	var outputData = `
 		p>You have a new POTLUCK request</p>
@@ -185,7 +163,7 @@ function sendemailRequest(guestEmails, potLuckDate, potLuckId, theme, destinatio
 	      <li>Id of PotLuck: ${potLuckId}</li>
 	    </ul>
 	`;
-	// console.log(outputData);
+
 	// create reusable transporter object using the default SMTP transport
 	var transporter = nodemailer.createTransport({
 	    // service:'gmail',
@@ -224,23 +202,7 @@ function sendemailRequest(guestEmails, potLuckDate, potLuckId, theme, destinatio
 	});
 }
 
-// function getPotLuckDetails(){
 
-// 	const Op = Sequelize.Op;
-
-// 	db.PotLuck.findOne({
-// 		where: {
-// 			UserId: UserId,
-// 			createdAt: {
-// 				[Op.eq]: new Date()
-// 			}
-// 		}
-// 	}).then(function(potLuckInfo){
-
-// 		return potluckInfo;
-// 	})
-
-// }
 //get all potluck info of the user that they host
 router.get("/user/potLuck",function(req,res){
 	db.PotLuck.findAll({
@@ -248,12 +210,8 @@ router.get("/user/potLuck",function(req,res){
 			UserId: req.user.dataValues.id
 		}
 	}).then(function(potLuckData){
-		// res.json(potLuckData)
 		console.log("------data---"+JSON.stringify(potLuckData))
 		var data = JSON.stringify(potLuckData);
-		//res.redirect('/dashbord/dashbord',{data:data});
-		//res.render(`/dashbord/dashbord?${JSON.stringify(res.json(potLuckData))}`);
-		//res.render('dashbord',{potLuckData: potLuckData});
 		res.json({potLuckData: potLuckData});
 	})
 })

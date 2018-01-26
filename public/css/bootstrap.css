@@ -2553,6 +2553,7 @@ fieldset[disabled] a.btn {
   color: #fff;
   background-color: #17a2b8;
   border-color: #17a2b8;
+  margin-top: 15px;
 }
 
 .btn-info:hover {
@@ -4891,6 +4892,15 @@ tbody.collapse.show {
   background-color: #d4edda;
   border-color: #c3e6cb;
   margin-top: 25px;
+}
+
+.alert-information{
+  color: white;
+  background-color: #3498DB;
+  border-color: #c3e6cb;
+  margin-left: -30px;
+  /*margin-top: 25px;*/
+  text-align: center;
 }
 
 .alert-success hr {

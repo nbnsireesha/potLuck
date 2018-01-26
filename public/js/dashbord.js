@@ -1,7 +1,8 @@
 $(document).ready(function() {
+
 	$(".hostPotForm").hide();
 	$(".inviteForm").hide();
-	// var db = require('../models');
+
 	var userContainer = $(".user-container");
 	//$(document).on("click", "button.potLuckInfo", showAllPotLucks);
 	$(document).on("click", "#potLuckCreate", creatPotLuck);
@@ -57,27 +58,35 @@ $(document).ready(function() {
 	    });
 
 	}
-	var bodyContainer = $(".body-container");
+	var userInfo = $(".userInfo");
 	function upsertPotLuck(potLuckData){
 		console.log("inside upsert");
 		$.post("/potLuck/potLuck", potLuckData)
 			.done(function(data){
+				console.log("***data***"+data.data);
 				$(".hostPotForm").hide();
+				// div that shows the potLuck id
+				var alertDiv = $("<div>");
+				alertDiv.addClass("alert alert-information");
+				alertDiv.text("Your Current PotLuck Id" +" " +data.data.id);		   
+				userInfo.append(alertDiv);
+				$(".alert-information").show();
+
 			})
 			.fail(function(err){
 				console.log(err);
 			});
-		potLuckDate.val("");
-		potLuckDestenation.val("");
-		potLuckTheme.val("");
+		// potLuckDate.val("");
+		// potLuckDestenation.val("");
+		// potLuckTheme.val("");
 
-		//$(".alert-success").show();
-		var alertSuccesDiv = $("<div>");
-		alertSuccesDiv.addClass("alert alert-success");
-		alertSuccesDiv.text("You can now invite to your PotLuck");
-		bodyContainer.append(alertSuccesDiv);
+		// //$(".alert-success").show();
+		// var alertSuccesDiv = $("<div>");
+		// alertSuccesDiv.addClass("alert alert-success");
+		// alertSuccesDiv.text("You can now invite to your PotLuck");
+		// bodyContainer.append(alertSuccesDiv);
 
-		$(".alert-success").show().delay(3000).fadeOut();
+		// $(".alert-success").show().delay(3000).fadeOut();
 
 
 	}
@@ -98,6 +107,7 @@ $(document).ready(function() {
 	}
 
 	var guestEmails = $("#emails");
+	var idInvite = $("#idInvite");
 
 	function invite(event){
 		event.preventDefault();
@@ -106,17 +116,28 @@ $(document).ready(function() {
 	    }
 	    console.log("inside create potluck(2)");
 	    upsertInvite({
-	      guestEmails: guestEmails
-	        .val()
-	        .trim()
+	      guestEmails: guestEmails.val().trim(),
+	      idInvite: idInvite.val().trim()
 	    });
 	}
+
+	var bodyContainer = $(".body-container");
 
 	function upsertInvite(guestData){
 		console.log("inside upsert invite");
 		$.post("/potLuck/potLuck/update", guestData)
 			.done(function(data){
 				$(".inviteForm").hide();
+				if(data.data === "invalid potluck for the user"){
+
+					var alertDiv = $("<div>");
+					alertDiv.addClass("alert alert-danger");
+					alertDiv.text("invalid potluck for the user");
+						   
+					bodyContainer.append(alertDiv);
+					$(".alert-danger").show().delay(3000).fadeOut();
+
+				}
 			})
 			.fail(function(err){
 				console.log(err);
