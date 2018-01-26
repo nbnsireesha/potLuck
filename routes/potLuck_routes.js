@@ -93,59 +93,57 @@ router.post('/potLuck/update', function(req, res){
 				res.json({data:error});
 				return;
 			}
-			emails = JSON.stringify(data.guestEmails);
-			if(emails == "null"){
-				var allEmails = guestEmails;
-			}
 			else{
-				 allEmails = emails +"," +guestEmails;
-			}
-			
-			var potluckadd = {
-				guestEmails: allEmails
-			};
-			db.PotLuck.update(potluckadd, 
-			{
-				where:{	
-					UserId: req.user.dataValues.id,
-					id: idInvite
+				emails = JSON.stringify(data.guestEmails);
+				console.log("inside else");
+				if(emails == "null"){
+					var allEmails = guestEmails;
 				}
+				else{
+					 allEmails = emails +"," +guestEmails;
+				}
+				
+				var potluckadd = {
+					guestEmails: allEmails
+				};
+				db.PotLuck.update(potluckadd, 
+				{
+					where:{	
+						UserId: req.user.dataValues.id,
+						id: idInvite
+					}
 
-			}, 
-			function(err, potLuck){
-					if(err) throw err;
-					emailCode();
-					
-			});
+				}).then(function(potLuck){
+						//if(err) throw err;
+						//emailCode();
+
+						db.PotLuck.findOne({
+							where: {
+								UserId: UserId,
+								id:idInvite
+							}
+						}).then(function(potLuckInfo){
+							potLuckDate = JSON.stringify(potLuckInfo.date);
+						 	potLuckId = JSON.stringify(potLuckInfo.id);
+						 	theme = JSON.stringify(potLuckInfo.theme);
+						 	destination = JSON.stringify(potLuckInfo.hostedAt);
+
+						 	//function call which sends req mails to the guest
+						 	sendemailRequest(guestEmails, potLuckDate, potLuckId, theme, destination);
+							//req.flash('success_msg', 'Invited Guests');
+
+							//res.redirect('/dashbord/dashbord');
+						})
+
+				});
+
+			}//end of else
 
 		}).catch(function(err){
 			console.log(err);
 		});
 
-
-		function emailCode(){
-
-			//getting user details so that we can send host info to the guest
-			db.PotLuck.findOne({
-				where: {
-					UserId: UserId
-				}
-			}).then(function(potLuckInfo){
-				potLuckDate = JSON.stringify(potLuckInfo.date);
-			 	potLuckId = JSON.stringify(potLuckInfo.id);
-			 	theme = JSON.stringify(potLuckInfo.theme);
-			 	destination = JSON.stringify(potLuckInfo.hostedAt);
-
-			 	//function call which sends req mails to the guest
-			 	sendemailRequest(guestEmails, potLuckDate, potLuckId, theme, destination);
-				//req.flash('success_msg', 'Invited Guests');
-
-				//res.redirect('/dashbord/dashbord');
-			})
-
-		}
-
-})
+});
 //function that sends email requests
 function sendemailRequest(guestEmails, potLuckDate, potLuckId, theme, destination){
 

@@ -51,11 +51,11 @@ $(document).ready(function() {
 			if((results.data) === "your potluckId is invalid"){
 
 				var alertDiv = $("<div>");
-				alertDiv.addClass("alert alert-danger");
+				alertDiv.addClass("alert alert-danger invalid");
 				alertDiv.text("Your potluckId is invalid");
 					   
 				bodyContainer.append(alertDiv);
-				$(".alert-danger").show().delay(3000).fadeOut();
+				$(".invalid").show().delay(3000).fadeOut();
 			}
 
 			console.log("done");

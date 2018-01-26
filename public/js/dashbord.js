@@ -143,5 +143,7 @@ $(document).ready(function() {
 				console.log(err);
 			});
 		guestEmails.val("");
+		idInvite.val("");
+		$(".inviteForm").hide();
 	}
 }); 

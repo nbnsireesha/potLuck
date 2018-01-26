@@ -5,6 +5,8 @@ $(document).ready(function() {
 	$(document).on("click", ".foodinfo", show);
 	$(document).on("click", ".see", showfoodInfo);
 
+	var bodyContainer = $(".body-container");
+
 	var idOfPotLuck = $("#idOfPotLuck");
 
 	function show(event){
@@ -44,7 +46,19 @@ $(document).ready(function() {
 		//console.log("id of potluck***"+JSON.stringify(id));
 		$.get("/potLuckFood/potLuck/food?idOfPotLuck="+id, function(data){
 			console.log("potluck id data***"+ JSON.stringify(data));
-			if(data.length !== 0 ){
+
+			if(data.data.length == 0){
+				$(".potLuck-FoodContainer").hide();
+				var alertDiv = $("<div>");
+				alertDiv.addClass("alert alert-info");
+				alertDiv.text("No Information of this PotLuck yet");
+						   
+				bodyContainer.append(alertDiv);
+				$(".alert-info").show().delay(4000).fadeOut();
+
+			}
+
+			if(data.data.length !== 0 ){
 				for (var i = 0; i < data.data.length; i++) {
 					var row = $("#potluckFood > tbody");
 	     				 row.addClass("eventsInTable");
