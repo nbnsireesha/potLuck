@@ -147,9 +147,10 @@ router.post('/potLuck/update', function(req, res){
 //function that sends email requests
 function sendemailRequest(guestEmails, potLuckDate, potLuckId, theme, destination){
 
+	var websiteLink = "https://rocky-taiga-71900.herokuapp.com/users/login";
 
 	var outputData = `
-		p>You have a new POTLUCK request</p>
+		<p>You have a new POTLUCK request</p>
     	<h3>Contact Details</h3>
     	<ul>  
 	      <li>Name: ${userName}</li>
@@ -159,6 +160,7 @@ function sendemailRequest(guestEmails, potLuckDate, potLuckId, theme, destinatio
 	      <li>Hosted At: ${destination}</li>
 	      <li>Date of PotLuck: ${potLuckDate}</li>
 	      <li>Id of PotLuck: ${potLuckId}</li>
+	      <li>Join Here: ${websiteLink}</li>
 	    </ul>
 	`;
 
